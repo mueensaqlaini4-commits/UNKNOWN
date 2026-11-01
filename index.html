@@ -1,0 +1,899 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#f5f7fb">
+<title>Probability Master 12</title>
+<style>
+:root{
+--bg:#f5f7fb;--surface:#fff;--text:#182338;
+--muted:#718096;--line:#e4e9f1;--primary:#315efb;
+--soft:#edf1ff;--green:#078b69;--red:#dc4545;
+}
+*{box-sizing:border-box}
+body{
+margin:0;background:var(--bg);color:var(--text);
+font-family:system-ui,-apple-system,Arial,sans-serif;
+}
+body.dark{
+--bg:#101827;--surface:#1b2739;--text:#f1f5f9;
+--muted:#a6b3c5;--line:#334155;--soft:#26385a;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.top{
+background:var(--surface);border-bottom:1px solid var(--line);
+padding:14px 16px;position:sticky;top:0;z-index:10;
+}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.brand{font-weight:850;font-size:17px;letter-spacing:-.5px}
+.brand span{color:var(--primary)}
+.topright{display:flex;gap:7px}
+.iconbtn{
+background:var(--surface);border:1px solid var(--line);
+color:var(--text);border-radius:9px;padding:9px 12px;
+}
+main{max-width:1000px;margin:auto;padding:16px 14px 105px}
+.page{display:none}
+.page.active{display:block}
+h1{font-size:26px;letter-spacing:-.8px;margin:8px 0 12px}
+h2{font-size:20px;margin:0 0 12px}
+h3{font-size:16px;margin:0 0 9px}
+p{color:var(--muted);font-size:14px;line-height:1.65}
+.small{font-size:12px}
+.hero{
+background:#172b55;color:white;border-radius:18px;
+padding:22px;margin:12px 0 18px;
+}
+.hero p{color:#cbd5ed}
+.hero h1{font-size:29px}
+.eyebrow{font-size:11px;letter-spacing:1.5px;color:#9db7ff;font-weight:800}
+.card{
+background:var(--surface);border:1px solid var(--line);
+border-radius:14px;padding:15px;margin-bottom:13px;min-width:0;
+}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.tile{
+background:var(--surface);border:1px solid var(--line);
+border-radius:13px;padding:14px;text-align:left;
+color:var(--text);min-height:110px;width:100%;
+}
+.tile .symbol{font-size:24px;margin-bottom:9px}
+.tile strong{display:block;font-size:14px}
+.tile small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}
+.btn{
+background:var(--primary);color:white;border:0;
+border-radius:9px;padding:12px 15px;font-weight:700;
+}
+.btn.secondary{background:var(--soft);color:var(--primary)}
+.btn.ghost{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+.btn.danger{background:#fff0f0;color:#bd3636}
+.btn.full{width:100%}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tag{
+display:inline-block;padding:5px 9px;border-radius:20px;
+background:var(--soft);color:var(--primary);
+font-size:11px;font-weight:750;
+}
+.formula{
+background:var(--soft);padding:14px;border-radius:10px;
+text-align:center;color:var(--primary);
+font-size:18px;font-weight:750;margin:12px 0;
+overflow-wrap:anywhere;
+}
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.field input,.field select{
+width:100%;padding:12px;border:1px solid var(--line);
+border-radius:9px;background:var(--bg);color:var(--text);
+outline-color:var(--primary);
+}
+.answer{
+padding:13px;border-radius:10px;background:#e9f8f2;
+color:#087a59;line-height:1.8;margin-top:12px;overflow-wrap:anywhere;
+}
+.answer.bad{background:#fff0f0;color:#bd3636}
+.option{
+display:flex;gap:10px;align-items:center;
+background:var(--bg);border:1px solid var(--line);
+padding:12px;border-radius:9px;margin:8px 0;
+font-size:14px;cursor:pointer;
+}
+.option input{accent-color:var(--primary)}
+.progress{height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;background:var(--primary);width:0}
+.tabs{display:flex;gap:7px;overflow:auto;margin:13px 0}
+.tabs button{
+border:1px solid var(--line);border-radius:9px;
+padding:9px 12px;background:var(--surface);
+white-space:nowrap;color:var(--text);
+}
+.tabs button.active{background:var(--primary);color:white}
+.barrow{display:flex;align-items:center;gap:8px;margin:10px 0}
+.barlabel{width:55px;font-size:12px}
+.bartrack{flex:1;height:13px;background:var(--line);border-radius:10px;overflow:hidden}
+.bartrack div{height:100%;background:var(--primary);transition:width .2s}
+.barvalue{font-size:12px;width:38px;text-align:right}
+.dice{
+width:110px;height:110px;border-radius:20px;
+background:white;color:#172b55;border:2px solid #dbe3ef;
+display:flex;align-items:center;justify-content:center;
+font-size:75px;margin:15px auto;
+box-shadow:0 8px 22px #00000012;
+}
+.coin{
+width:115px;height:115px;border-radius:50%;
+background:linear-gradient(135deg,#ffe29b,#c48a20);
+color:#503509;display:flex;align-items:center;justify-content:center;
+font-size:20px;font-weight:900;margin:15px auto;
+border:5px solid #eac66e;
+}
+.playing-card{
+width:92px;height:125px;border-radius:10px;
+background:white;color:#172b55;border:1px solid #ccd5e3;
+display:flex;flex-direction:column;align-items:center;
+justify-content:center;font-size:31px;margin:15px auto;
+box-shadow:0 5px 15px #00000012;
+}
+.playing-card.red{color:#dc4545}
+.nav{
+position:fixed;bottom:0;left:0;right:0;z-index:20;
+background:var(--surface);border-top:1px solid var(--line);
+display:flex;justify-content:space-around;
+padding:8px 3px calc(8px + env(safe-area-inset-bottom));
+}
+.nav button{
+border:0;background:none;color:var(--muted);
+display:flex;flex-direction:column;align-items:center;
+gap:4px;font-size:10px;padding:5px 3px;
+}
+.nav button b{font-size:19px;font-weight:500}
+.nav button.active{color:var(--primary);font-weight:800}
+hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+@media(min-width:700px){
+.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+main{padding-top:25px}
+.nav{left:50%;transform:translateX(-50%);max-width:600px;border:1px solid var(--line);border-radius:14px 14px 0 0}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+<div class="toprow">
+<div class="brand">PROBABILITY <span>MASTER 12</span></div>
+<div class="topright">
+<button class="iconbtn" onclick="toggleLang()" id="langBtn">हिंदी</button>
+<button class="iconbtn" onclick="toggleTheme()" id="themeBtn">☾</button>
+</div>
+</div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+<div class="hero">
+<div class="eyebrow">ADVANCED MATHEMATICS LAB</div>
+<h1 id="welcome">Master Probability.</h1>
+<p id="welcomeSub">Learn concepts. Perform experiments. Test your knowledge.</p>
+<div class="btnrow">
+<button class="btn" onclick="go('learn')">Start Learning →</button>
+<button class="btn secondary" onclick="go('lab')">Open Lab</button>
+</div>
+</div>
+
+<div class="grid">
+<div class="card"><div class="small muted">TOTAL ATTEMPTS</div><div class="stat" id="attempts">0</div></div>
+<div class="card"><div class="small muted">BEST SCORE</div><div class="stat" id="best">0%</div></div>
+</div>
+
+<h2>Learning Universe</h2>
+<div class="grid">
+<button class="tile" onclick="go('learn')"><div class="symbol">📚</div><strong>Chapter Learning</strong><small>Complete Class 12 theory</small></button>
+<button class="tile" onclick="go('formulas')"><div class="symbol">∑</div><strong>Formula Bank</strong><small>Important formulas</small></button>
+<button class="tile" onclick="go('solver')"><div class="symbol">🧮</div><strong>Smart Solver</strong><small>Calculate probability</small></button>
+<button class="tile" onclick="go('lab')"><div class="symbol">🎲</div><strong>Probability Lab</strong><small>Live experiments</small></button>
+<button class="tile" onclick="go('practice')"><div class="symbol">✍️</div><strong>Practice Arena</strong><small>Board and JEE questions</small></button>
+<button class="tile" onclick="go('exam')"><div class="symbol">⏱️</div><strong>Exam Simulator</strong><small>Timed test</small></button>
+<button class="tile" onclick="go('analytics')"><div class="symbol">📊</div><strong>Analytics</strong><small>Track your performance</small></button>
+<button class="tile" onclick="go('settings')"><div class="symbol">⚙️</div><strong>Settings</strong><small>Language and theme</small></button>
+</div>
+
+<div class="card">
+<h3>Learning Progress</h3>
+<div class="progress"><div id="homeProgress"></div></div>
+<p id="progressText">Complete quizzes to track your progress.</p>
+</div>
+</section>
+
+<!-- LEARNING -->
+<section id="learn" class="page">
+<span class="tag">CLASS 12 • NCERT</span>
+<h1>Chapter Learning</h1>
+<p>Complete theory, formulas and examples.</p>
+<div id="lessons"></div>
+</section>
+
+<!-- FORMULAS -->
+<section id="formulas" class="page">
+<h1>Formula Library</h1>
+<p>Important Class 12 and Advanced Probability formulas.</p>
+<div class="field"><input id="formulaSearch" placeholder="Search formula..." oninput="renderFormulas()"></div>
+<div id="formulaList"></div>
+</section>
+
+<!-- SOLVER -->
+<section id="solver" class="page">
+<h1>Smart Probability Solver</h1>
+<p>Enter valid probability values between 0 and 1.</p>
+<div class="card">
+<div class="field">
+<label>Choose calculation</label>
+<select id="solverMode" onchange="solverFields()">
+<option value="conditional">Conditional Probability</option>
+<option value="independent">Independent Events</option>
+<option value="union">Union of Events</option>
+<option value="complement">Complement Probability</option>
+<option value="total">Total Probability</option>
+<option value="bayes">Bayes' Theorem</option>
+</select>
+</div>
+<div id="solverInputs"></div>
+<button class="btn full" onclick="solve()">Calculate Answer</button>
+<div id="solverResult"></div>
+</div>
+</section>
+
+<!-- LAB -->
+<section id="lab" class="page">
+<h1>Probability Lab</h1>
+<p>Perform experiments and compare theoretical and experimental probability.</p>
+<div class="tabs">
+<button class="active" onclick="labTab('dice',this)">🎲 Dice</button>
+<button onclick="labTab('coin',this)">🪙 Coin</button>
+<button onclick="labTab('cards',this)">🃏 Cards</button>
+</div>
+<div id="labContent"></div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice" class="page">
+<h1>Practice Arena</h1>
+<p>Test your understanding with topic-wise questions.</p>
+<div class="card">
+<div class="field">
+<label>Difficulty</label>
+<select id="difficulty">
+<option value="all">All levels</option>
+<option value="basic">Basic</option>
+<option value="advanced">Advanced</option>
+</select>
+</div>
+<button class="btn full" onclick="startQuiz('practice')">Start Practice</button>
+</div>
+<div id="practiceQuiz"></div>
+</section>
+
+<!-- EXAM -->
+<section id="exam" class="page">
+<h1>Exam Simulator</h1>
+<p>Timed test with automatic scoring.</p>
+<div class="card">
+<h3>Exam Instructions</h3>
+<p>• 10 multiple-choice questions</p>
+<p>• Time limit: 10 minutes</p>
+<p>• 1 mark for each correct answer</p>
+<p>• No negative marking in this practice test</p>
+<button class="btn full" onclick="startQuiz('exam')">Start Examination</button>
+</div>
+<div id="examQuiz"></div>
+</section>
+
+<!-- ANALYTICS -->
+<section id="analytics" class="page">
+<h1>Performance Analytics</h1>
+<div class="grid">
+<div class="card"><div class="small muted">ATTEMPTS</div><div class="stat" id="aAttempts">0</div></div>
+<div class="card"><div class="small muted">BEST RESULT</div><div class="stat" id="aBest">0%</div></div>
+<div class="card"><div class="small muted">TOTAL CORRECT</div><div class="stat" id="aCorrect">0</div></div>
+</div>
+<div class="card">
+<h3>Recent Test History</h3>
+<div id="history"></div>
+</div>
+<div class="card">
+<h3>Study Feedback</h3>
+<p id="tips">Take a test to get study feedback.</p>
+</div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="page">
+<h1>Settings</h1>
+<div class="card">
+<h3>Language</h3>
+<button class="btn secondary" onclick="toggleLang()">Switch Hindi / English</button>
+<p id="languageStatus">English</p>
+</div>
+<div class="card">
+<h3>Appearance</h3>
+<button class="btn secondary" onclick="toggleTheme()">Switch light / dark</button>
+</div>
+<div class="card">
+<h3>Data Management</h3>
+<p>Your progress is stored locally on this device.</p>
+<button class="btn danger" onclick="resetData()">Reset all progress</button>
+</div>
+<div class="card">
+<h3>About</h3>
+<p>Probability Master 12<br>Advanced Mathematics Learning Application<br>Version 3.0<br>Offline • No API • No Database</p>
+</div>
+</section>
+
+<footer>PROBABILITY MASTER 12 • ADVANCED EDITION</footer>
+</main>
+
+<nav class="nav">
+<button class="active" onclick="go('home',this)"><b>⌂</b>Home</button>
+<button onclick="go('learn',this)"><b>▤</b>Learn</button>
+<button onclick="go('lab',this)"><b>🎲</b>Lab</button>
+<button onclick="go('practice',this)"><b>✓</b>Practice</button>
+<button onclick="go('analytics',this)"><b>▥</b>Progress</button>
+</nav>
+
+<script>
+/* APP CORE */
+const $=id=>document.getElementById(id);
+let lang=localStorage.getItem('pm_lang')||'en';
+let theme=localStorage.getItem('pm_theme')||'light';
+
+let stats;
+try{
+ stats=JSON.parse(localStorage.getItem('pm_stats'))||
+ {attempts:0,best:0,correct:0,history:[]};
+}catch(e){
+ stats={attempts:0,best:0,correct:0,history:[]};
+}
+function save(){
+ try{localStorage.setItem('pm_stats',JSON.stringify(stats))}
+ catch(e){}
+}
+function go(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ if(btn&&btn.closest('.nav'))btn.classList.add('active');
+ else{
+  const map={home:0,learn:1,lab:2,practice:3,analytics:4};
+  if(map[id]!==undefined)document.querySelectorAll('.nav button')[map[id]].classList.add('active');
+ }
+ window.scrollTo(0,0);
+}
+function toggleTheme(){
+ theme=theme==='light'?'dark':'light';
+ localStorage.setItem('pm_theme',theme);
+ applyTheme();
+}
+function applyTheme(){
+ document.body.classList.toggle('dark',theme==='dark');
+ $('themeBtn').textContent=theme==='dark'?'☀':'☾';
+}
+function toggleLang(){
+ lang=lang==='en'?'hi':'en';
+ localStorage.setItem('pm_lang',lang);
+ $('langBtn').textContent=lang==='en'?'हिंदी':'English';
+ $('languageStatus').textContent=lang==='en'?'English':'हिंदी';
+ $('welcome').textContent=lang==='en'?'Master Probability.':'प्रायिकता सीखें।';
+ $('welcomeSub').textContent=lang==='en'?
+ 'Learn concepts. Perform experiments. Test your knowledge.':
+ 'कॉन्सेप्ट सीखें, प्रयोग करें और अपनी तैयारी जाँचें।';
+ renderLessons();
+}
+function updateStats(){
+ $('attempts').textContent=stats.attempts;
+ $('best').textContent=stats.best+'%';
+ $('aAttempts').textContent=stats.attempts;
+ $('aBest').textContent=stats.best+'%';
+ $('aCorrect').textContent=stats.correct;
+ const pct=stats.attempts?Math.min(100,stats.correct/(stats.attempts*10)*100):0;
+ $('homeProgress').style.width=pct+'%';
+ $('progressText').textContent=stats.attempts?
+ 'Total correct answers: '+stats.correct:
+ 'Complete quizzes to track your progress.';
+ $('history').innerHTML=stats.history.length?
+ stats.history.slice(0,10).map(x=>
+ `<p>${x.type} • ${x.score}/${x.total} • ${x.date}</p><hr>`
+ ).join(''):'<p>No tests completed yet.</p>';
+ $('tips').textContent=stats.attempts?
+ 'Keep practising conditional probability, independent events and Bayes theorem. Review your incorrect answers regularly.':
+ 'Start with the basic lessons and take your first practice test.';
+}
+function resetData(){
+ if(confirm('Delete all locally saved progress?')){
+ stats={attempts:0,best:0,correct:0,history:[]};
+ save();updateStats();alert('Progress reset.');
+ }
+}
+function randomInt(n){return Math.floor(Math.random()*n)}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* CHAPTER LESSONS */
+const lessons=[
+{
+t:'1. Random Experiments and Events',
+hi:'1. यादृच्छिक प्रयोग और घटनाएँ',
+d:'A random experiment has an outcome that cannot be predicted with certainty. An event is a collection of outcomes.',
+dh:'यादृच्छिक प्रयोग में परिणाम निश्चित रूप से पहले नहीं बताया जा सकता। घटना परिणामों का समूह होती है।',
+f:'S = Sample Space',
+e:'Rolling a die: S = {1,2,3,4,5,6}. Even number event = {2,4,6}.'
+},
+{
+t:'2. Conditional Probability',
+hi:'2. सशर्त प्रायिकता',
+d:'The probability of A when B has already occurred.',
+dh:'जब घटना B घट चुकी हो, तब घटना A की प्रायिकता सशर्त प्रायिकता कहलाती है।',
+f:'P(A|B) = P(A ∩ B) / P(B)',
+e:'If P(A∩B)=1/4 and P(B)=1/2, then P(A|B)=1/2.'
+},
+{
+t:'3. Multiplication Theorem',
+hi:'3. गुणन प्रमेय',
+d:'The joint probability of two events can be calculated using conditional probability.',
+dh:'दो घटनाओं के एक साथ घटित होने की प्रायिकता सशर्त प्रायिकता से निकाली जाती है।',
+f:'P(A ∩ B) = P(A) × P(B|A)',
+e:'If P(A)=1/2 and P(B|A)=1/3, joint probability = 1/6.'
+},
+{
+t:'4. Independent Events',
+hi:'4. स्वतंत्र घटनाएँ',
+d:'Two events are independent if the occurrence of one does not change the probability of the other.',
+dh:'दो घटनाएँ स्वतंत्र हैं यदि एक घटना का घटित होना दूसरी की प्रायिकता को नहीं बदलता।',
+f:'P(A ∩ B) = P(A) × P(B)',
+e:'Tossing a coin and rolling a die are independent experiments.'
+},
+{
+t:'5. Total Probability Theorem',
+hi:'5. कुल प्रायिकता प्रमेय',
+d:'If B1, B2,...,Bn form a partition of the sample space, total probability is calculated by summing over all cases.',
+dh:'यदि B1, B2,...,Bn प्रतिदर्श समष्टि का विभाजन बनाते हैं, तो कुल प्रायिकता सभी स्थितियों के योग से निकलती है।',
+f:'P(A) = Σ P(Bᵢ)P(A|Bᵢ)',
+e:'For two cases: P(A)=P(B)P(A|B)+P(B′)P(A|B′).'
+},
+{
+t:'6. Bayes Theorem',
+hi:'6. बेयज़ प्रमेय',
+d:'Bayes theorem updates the probability of a cause after observing an outcome.',
+dh:'किसी परिणाम की जानकारी मिलने पर उसके कारण की प्रायिकता निकालने में बेयज़ प्रमेय उपयोगी है।',
+f:'P(B|A) = P(B)P(A|B) / P(A)',
+e:'Use total probability in the denominator when multiple causes are possible.'
+},
+{
+t:'7. Complement and Union',
+hi:'7. पूरक और संघ घटनाएँ',
+d:'The complement is the event that A does not occur. Union means at least one event occurs.',
+dh:'पूरक घटना A के न होने को और संघ घटना कम से कम एक घटना के होने को दर्शाता है।',
+f:'P(A′)=1-P(A) | P(A∪B)=P(A)+P(B)-P(A∩B)',
+e:'The union formula avoids counting the intersection twice.'
+}
+];
+function renderLessons(){
+ $('lessons').innerHTML=lessons.map((x,i)=>`
+ <div class="card">
+ <span class="tag">LESSON ${i+1}</span>
+ <h2 style="margin-top:10px">${lang==='en'?x.t:x.hi}</h2>
+ <p>${lang==='en'?x.d:x.dh}</p>
+ <div class="formula">${x.f}</div>
+ <p><b>Example:</b> ${x.e}</p>
+ </div>`).join('');
+}
+
+/* FORMULA BANK */
+const formulas=[
+['Conditional Probability','P(A|B)=P(A∩B)/P(B)'],
+['Multiplication Theorem','P(A∩B)=P(A)P(B|A)'],
+['Independent Events','P(A∩B)=P(A)P(B)'],
+['Complement','P(A′)=1-P(A)'],
+['Addition Theorem','P(A∪B)=P(A)+P(B)-P(A∩B)'],
+['Mutually Exclusive','P(A∩B)=0'],
+['Independent Complements','P(A′∩B′)=P(A′)P(B′)'],
+['Total Probability','P(A)=Σ P(Bᵢ)P(A|Bᵢ)'],
+['Bayes Theorem','P(Bᵢ|A)=P(Bᵢ)P(A|Bᵢ)/ΣP(Bⱼ)P(A|Bⱼ)'],
+['Odds in Favour','P(A)/(1-P(A))'],
+['Conditional Complement','P(A′|B)=1-P(A|B)'],
+['Three Independent Events','P(A∩B∩C)=P(A)P(B)P(C)']
+];
+function renderFormulas(){
+ const q=$('formulaSearch').value.toLowerCase();
+ $('formulaList').innerHTML=formulas.filter(x=>
+ (x[0]+' '+x[1]).toLowerCase().includes(q)
+ ).map(x=>`<div class="card"><h3>${x[0]}</h3>
+ <div class="formula">${x[1]}</div>
+ <button class="btn ghost" onclick="copyText('${x[1]}')">Copy Formula</button></div>`
+ ).join('')||'<p>No formulas found.</p>';
+}
+function copyText(s){
+ if(navigator.clipboard){
+ navigator.clipboard.writeText(s).then(()=>alert('Copied!')).catch(()=>alert(s));
+ }else alert(s);
+}
+
+/* CALCULATOR */
+const field=(id,label)=>`<div class="field"><label>${label}</label>
+<input id="${id}" type="number" min="0" max="1" step="any" placeholder="0 to 1"></div>`;
+function solverFields(){
+ const m=$('solverMode').value;
+ let h='';
+ if(m==='conditional')h=field('v1','P(A ∩ B)')+field('v2','P(B)');
+ if(m==='independent')h=field('v1','P(A)')+field('v2','P(B)');
+ if(m==='union')h=field('v1','P(A)')+field('v2','P(B)')+field('v3','P(A ∩ B)');
+ if(m==='complement')h=field('v1','P(A)');
+ if(m==='total')h=field('v1','P(B)')+field('v2','P(A|B)')+field('v3','P(B′)')+field('v4','P(A|B′)');
+ if(m==='bayes')h=field('v1','P(B)')+field('v2','P(A|B)')+field('v3','P(A)');
+ $('solverInputs').innerHTML=h;
+ $('solverResult').innerHTML='';
+}
+function val(id){return Number($(id).value)}
+function valid(...a){return a.every(x=>Number.isFinite(x)&&x>=0&&x<=1)}
+function solve(){
+ let m=$('solverMode').value,r=0,f='',v=[];
+ if(m==='conditional'){
+ v=[val('v1'),val('v2')];
+ if(!valid(...v)||v[1]===0||v[0]>v[1])return solveError();
+ r=v[0]/v[1];f='P(A|B) = P(A∩B) / P(B)';
+ }
+ if(m==='independent'){
+ v=[val('v1'),val('v2')];if(!valid(...v))return solveError();
+ r=v[0]*v[1];f='P(A∩B) = P(A) × P(B)';
+ }
+ if(m==='union'){
+ v=[val('v1'),val('v2'),val('v3')];
+ if(!valid(...v)||v[2]>Math.min(v[0],v[1])||v[0]+v[1]-v[2]>1)return solveError();
+ r=v[0]+v[1]-v[2];f='P(A∪B) = P(A)+P(B)-P(A∩B)';
+ }
+ if(m==='complement'){
+ v=[val('v1')];if(!valid(...v))return solveError();
+ r=1-v[0];f='P(A′) = 1-P(A)';
+ }
+ if(m==='total'){
+ v=[val('v1'),val('v2'),val('v3'),val('v4')];
+ if(!valid(...v)||Math.abs(v[0]+v[2]-1)>1e-8)return solveError();
+ r=v[0]*v[1]+v[2]*v[3];
+ f='P(A) = P(B)P(A|B)+P(B′)P(A|B′)';
+ }
+ if(m==='bayes'){
+ v=[val('v1'),val('v2'),val('v3')];
+ if(!valid(...v)||v[2]===0||v[0]*v[1]>v[2])return solveError();
+ r=v[0]*v[1]/v[2];f='P(B|A) = P(B)P(A|B) / P(A)';
+ }
+ if(!Number.isFinite(r)||r<0||r>1)return solveError();
+ $('solverResult').innerHTML=`<div class="answer">
+ <b>Formula:</b> ${f}<br>
+ <b>Answer:</b> ${r.toFixed(6)}<br>
+ <b>Percentage:</b> ${(r*100).toFixed(2)}%
+ </div>`;
+}
+function solveError(){
+ $('solverResult').innerHTML='<div class="answer bad">Invalid input. Check values and probability conditions.</div>';
+}
+
+/* PROBABILITY LAB */
+let labMode='dice';
+let diceCounts=[0,0,0,0,0,0],diceTotal=0;
+let coinCounts={H:0,T:0},coinTotal=0;
+let cardCounts={red:0,black:0,ace:0,face:0},cardTotal=0;
+const diceFaces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+function labTab(mode,btn){
+ labMode=mode;
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ renderLab();
+}
+function renderLab(){
+ if(labMode==='dice'){
+ $('labContent').innerHTML=`
+ <div class="card">
+ <h2>🎲 Dice Simulator</h2>
+ <p>Roll a fair six-sided die. Each outcome has theoretical probability 1/6.</p>
+ <div class="dice" id="diceFace">⚀</div>
+ <div style="text-align:center;font-weight:800" id="diceLast">Ready to roll</div>
+ <div class="field"><label>Number of rolls</label>
+ <select id="rollCount">
+ <option value="1">1 roll</option><option value="10">10 rolls</option>
+ <option value="50">50 rolls</option><option value="100">100 rolls</option>
+ <option value="500">500 rolls</option><option value="1000">1000 rolls</option>
+ </select></div>
+ <button class="btn full" onclick="runDice()">🎲 Roll Dice</button>
+ <div class="btnrow"><button class="btn ghost" onclick="resetDice()">Reset Results</button></div>
+ <div id="diceResult"></div>
+ </div>`;
+ drawDiceStats();
+ }
+ if(labMode==='coin'){
+ $('labContent').innerHTML=`
+ <div class="card">
+ <h2>🪙 Coin Toss Simulator</h2>
+ <p>For a fair coin, P(Heads)=1/2 and P(Tails)=1/2.</p>
+ <div class="coin" id="coinFace">COIN</div>
+ <div style="text-align:center;font-weight:800" id="coinLast">Ready to toss</div>
+ <div class="field"><label>Number of tosses</label>
+ <select id="coinCount">
+ <option value="1">1 toss</option><option value="10">10 tosses</option>
+ <option value="50">50 tosses</option><option value="100">100 tosses</option>
+ <option value="500">500 tosses</option><option value="1000">1000 tosses</option>
+ </select></div>
+ <button class="btn full" onclick="runCoin()">🪙 Toss Coin</button>
+ <div class="btnrow"><button class="btn ghost" onclick="resetCoin()">Reset Results</button></div>
+ <div id="coinResult"></div>
+ </div>`;
+ drawCoinStats();
+ }
+ if(labMode==='cards'){
+ $('labContent').innerHTML=`
+ <div class="card">
+ <h2>🃏 Playing Card Lab</h2>
+ <p>A standard deck contains 52 cards, 4 suits and 13 cards in each suit.</p>
+ <div class="playing-card" id="cardFace">🂠</div>
+ <div style="text-align:center;font-weight:800" id="cardLast">Ready to draw</div>
+ <div class="field"><label>Number of cards to draw</label>
+ <select id="cardCount">
+ <option value="1">1 card</option><option value="5">5 cards</option>
+ <option value="13">13 cards</option><option value="26">26 cards</option>
+ </select></div>
+ <button class="btn full" onclick="drawCards()">Draw Cards</button>
+ <div class="btnrow"><button class="btn ghost" onclick="resetCards()">Reset Results</button></div>
+ <div id="cardsResult"></div>
+ </div>`;
+ drawCardStats();
+ }
+}
+function runDice(){
+ let n=Number($('rollCount').value),last=1;
+ for(let i=0;i<n;i++){
+ last=randomInt(6)+1;diceCounts[last-1]++;diceTotal++;
+ }
+ $('diceFace').textContent=diceFaces[last-1];
+ $('diceLast').textContent='Last result: '+last;
+ drawDiceStats();
+}
+function drawDiceStats(){
+ if(!$('diceResult'))return;
+ let max=Math.max(1,...diceCounts);
+ $('diceResult').innerHTML=`
+ <hr><h3>Live Frequency Chart</h3>
+ ${diceCounts.map((v,i)=>`<div class="barrow">
+ <span class="barlabel">${i+1}</span>
+ <div class="bartrack"><div style="width:${v/max*100}%"></div></div>
+ <span class="barvalue">${v}</span></div>`).join('')}
+ <div class="answer">
+ Total rolls: ${diceTotal}<br>
+ Experimental P(6): ${diceTotal?(diceCounts[5]/diceTotal).toFixed(4):'0'}<br>
+ Theoretical P(6): 0.1667
+ </div>`;
+}
+function resetDice(){
+ diceCounts=[0,0,0,0,0,0];diceTotal=0;
+ $('diceFace').textContent='⚀';$('diceLast').textContent='Ready to roll';
+ drawDiceStats();
+}
+function runCoin(){
+ let n=Number($('coinCount').value),last='H';
+ for(let i=0;i<n;i++){
+ last=Math.random()<.5?'H':'T';coinCounts[last]++;coinTotal++;
+ }
+ $('coinFace').textContent=last==='H'?'HEADS':'TAILS';
+ $('coinLast').textContent='Last result: '+(last==='H'?'Heads':'Tails');
+ drawCoinStats();
+}
+function drawCoinStats(){
+ if(!$('coinResult'))return;
+ const h=coinCounts.H,t=coinCounts.T,max=Math.max(1,h,t);
+ $('coinResult').innerHTML=`
+ <hr><h3>Live Frequency Chart</h3>
+ <div class="barrow"><span class="barlabel">Heads</span><div class="bartrack"><div style="width:${h/max*100}%"></div></div><span class="barvalue">${h}</span></div>
+ <div class="barrow"><span class="barlabel">Tails</span><div class="bartrack"><div style="width:${t/max*100}%"></div></div><span class="barvalue">${t}</span></div>
+ <div class="answer">Total tosses: ${coinTotal}<br>
+ Experimental P(Heads): ${coinTotal?(h/coinTotal).toFixed(4):'0'}<br>
+ Theoretical P(Heads): 0.5</div>`;
+}
+function resetCoin(){
+ coinCounts={H:0,T:0};coinTotal=0;
+ $('coinFace').textContent='COIN';$('coinLast').textContent='Ready to toss';
+ drawCoinStats();
+}
+
+/* STANDARD 52 CARD DECK */
+const suits=[
+ {s:'♥',name:'Hearts',red:true},
+ {s:'♦',name:'Diamonds',red:true},
+ {s:'♣',name:'Clubs',red:false},
+ {s:'♠',name:'Spades',red:false}
+];
+const ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+function makeDeck(){
+ let deck=[];
+ suits.forEach(s=>ranks.forEach(r=>deck.push({
+ rank:r,suit:s.s,name:s.name,red:s.red
+ })));
+ return deck;
+}
+let deck=makeDeck();
+function drawCards(){
+ let n=Number($('cardCount').value);
+ if(deck.length<n)deck=makeDeck();
+ let drawn=[];
+ for(let i=0;i<n;i++){
+ let index=randomInt(deck.length);
+ drawn.push(deck.splice(index,1)[0]);
+ }
+ drawn.forEach(c=>{
+ cardTotal++;
+ if(c.red)cardCounts.red++;else cardCounts.black++;
+ if(c.rank==='A')cardCounts.ace++;
+ if(['J','Q','K'].includes(c.rank))cardCounts.face++;
+ });
+ let c=drawn[drawn.length-1];
+ $('cardFace').innerHTML=`${c.rank}<br>${c.suit}`;
+ $('cardFace').classList.toggle('red',c.red);
+ $('cardLast').textContent='Last card: '+c.rank+' of '+c.name;
+ drawCardStats();
+}
+function drawCardStats(){
+ if(!$('cardsResult'))return;
+ $('cardsResult').innerHTML=`
+ <hr><h3>Draw Statistics</h3>
+ <p>Cards drawn: ${cardTotal} • Cards remaining: ${deck.length}</p>
+ <div class="barrow"><span class="barlabel">Red</span><div class="bartrack"><div style="width:${cardCounts.red/Math.max(1,cardTotal)*100}%"></div></div><span class="barvalue">${cardCounts.red}</span></div>
+ <div class="barrow"><span class="barlabel">Black</span><div class="bartrack"><div style="width:${cardCounts.black/Math.max(1,cardTotal)*100}%"></div></div><span class="barvalue">${cardCounts.black}</span></div>
+ <div class="answer">
+ Aces: ${cardCounts.ace}<br>
+ Face cards (J, Q, K): ${cardCounts.face}<br>
+ Theoretical P(Red): 26/52 = 0.5<br>
+ Theoretical P(Ace): 4/52 = 0.0769
+ </div>`;
+}
+function resetCards(){
+ deck=makeDeck();cardTotal=0;
+ cardCounts={red:0,black:0,ace:0,face:0};
+ $('cardFace').textContent='🂠';
+ $('cardLast').textContent='Ready to draw';
+ drawCardStats();
+}
+
+/* QUESTION BANK */
+const questions=[
+{level:'basic',q:'What is the maximum value of a probability?',hi:'प्रायिकता का अधिकतम मान क्या है?',o:['0','1','2','-1'],a:1,e:'Probability lies between 0 and 1.'},
+{level:'basic',q:'What is P(A)+P(A′)?',hi:'P(A)+P(A′) कितना होता है?',o:['0','1','2','1/2'],a:1,e:'An event and its complement cover the entire sample space.'},
+{level:'basic',q:'A fair die is rolled. Find P(6).',hi:'एक निष्पक्ष पासा फेंका जाता है। P(6) ज्ञात करें।',o:['1/2','1/3','1/6','1/4'],a:2,e:'One favourable outcome out of six.'},
+{level:'basic',q:'If A and B are independent, P(A∩B) is:',hi:'यदि A और B स्वतंत्र हैं, तो P(A∩B) क्या है?',o:['P(A)+P(B)','P(A)P(B)','P(A)-P(B)','1'],a:1,e:'For independent events, multiply their probabilities.'},
+{level:'basic',q:'P(A|B) equals:',hi:'P(A|B) का सूत्र क्या है?',o:['P(A∩B)/P(B)','P(A)/P(B)','P(A)+P(B)','P(B)/P(A)'],a:0,e:'Conditional probability formula.'},
+{level:'basic',q:'A fair coin is tossed. P(Heads) is:',hi:'एक निष्पक्ष सिक्का उछाला जाता है। P(Heads) क्या है?',o:['0','1','1/2','1/4'],a:2,e:'There are two equally likely outcomes.'},
+{level:'basic',q:'For mutually exclusive events, P(A∩B) is:',hi:'परस्पर अपवर्जी घटनाओं के लिए P(A∩B) क्या है?',o:['1','0','P(A)','P(B)'],a:1,e:'Mutually exclusive events cannot occur together.'},
+{level:'basic',q:'The probability of a certain event is:',hi:'निश्चित घटना की प्रायिकता क्या होती है?',o:['0','1','1/2','-1'],a:1,e:'A certain event always occurs.'},
+{level:'advanced',q:'If P(A)=0.5 and P(B)=0.4, independent, find P(A∩B).',hi:'यदि P(A)=0.5 और P(B)=0.4 स्वतंत्र हैं, तो P(A∩B) निकालें।',o:['0.9','0.1','0.2','0.5'],a:2,e:'0.5 × 0.4 = 0.2.'},
+{level:'advanced',q:'If P(A∩B)=0.2 and P(B)=0.5, find P(A|B).',hi:'यदि P(A∩B)=0.2 और P(B)=0.5, तो P(A|B) निकालें।',o:['0.1','0.4','0.7','0.25'],a:1,e:'0.2/0.5 = 0.4.'},
+{level:'advanced',q:'If P(A)=0.6, P(B)=0.5 and P(A∩B)=0.3, find P(A∪B).',hi:'P(A)=0.6, P(B)=0.5 और P(A∩B)=0.3 हो, तो P(A∪B) निकालें।',o:['0.8','1.1','0.3','0.6'],a:0,e:'0.6+0.5-0.3 = 0.8.'},
+{level:'advanced',q:'If P(A)=0.4, P(B|A)=0.5, find P(A∩B).',hi:'P(A)=0.4 और P(B|A)=0.5 हो, तो P(A∩B) निकालें।',o:['0.9','0.2','0.1','0.4'],a:1,e:'0.4 × 0.5 = 0.2.'},
+{level:'advanced',q:'If P(A)=0.7, find P(A′).',hi:'यदि P(A)=0.7 है, तो P(A′) निकालें।',o:['0.7','1.7','0.3','0.2'],a:2,e:'1-0.7 = 0.3.'},
+{level:'advanced',q:'A bag has 3 red and 2 blue balls. One ball is selected. P(Red)?',hi:'एक थैले में 3 लाल और 2 नीली गेंदें हैं। लाल गेंद की प्रायिकता क्या है?',o:['2/5','3/5','1/5','1/2'],a:1,e:'3 favourable outcomes out of 5.'},
+{level:'advanced',q:'If P(A)=0.5, P(B)=0.5 and P(A∩B)=0.25, are A and B independent?',hi:'यदि P(A)=0.5, P(B)=0.5 और P(A∩B)=0.25 हैं, तो क्या घटनाएँ स्वतंत्र हैं?',o:['Yes','No','Cannot say','Both impossible'],a:0,e:'P(A)P(B)=0.25, equal to P(A∩B).'},
+{level:'advanced',q:'If P(A)=0.2 and P(B|A)=0.3, find P(A∩B).',hi:'P(A)=0.2 और P(B|A)=0.3 हो, तो P(A∩B) ज्ञात करें।',o:['0.5','0.6','0.06','0.1'],a:2,e:'0.2 × 0.3 = 0.06.'}
+];
+
+/* PRACTICE AND EXAM */
+let quiz=[],quizIndex=0,quizScore=0,quizType='practice';
+let quizLocked=false,examSeconds=600,examTimer=null;
+function startQuiz(type){
+ if(examTimer){clearInterval(examTimer);examTimer=null}
+ quizType=type;quizIndex=0;quizScore=0;quizLocked=false;
+ let pool=questions;
+ if(type==='practice'){
+ const d=$('difficulty').value;
+ if(d!=='all')pool=questions.filter(q=>q.level===d);
+ quiz=pool.slice().sort(()=>Math.random()-.5);
+ }else{
+ quiz=questions.slice().sort(()=>Math.random()-.5).slice(0,10);
+ examSeconds=600;
+ }
+ const container=$(type==='exam'?'examQuiz':'practiceQuiz');
+ container.innerHTML='';
+ if(type==='exam'){
+ container.innerHTML='<div class="card"><h3 id="examTimer">10:00</h3><div id="examQuestion"></div></div>';
+ examTimer=setInterval(()=>{
+ examSeconds--;
+ if($('examTimer')){
+ $('examTimer').textContent=Math.floor(examSeconds/60)+':'+String(examSeconds%60).padStart(2,'0');
+ }
+ if(examSeconds<=0)finishQuiz();
+ },1000);
+ }else{
+ container.innerHTML='<div class="card"><div id="practiceQuestion"></div></div>';
+ }
+ renderQuestion();
+}
+function renderQuestion(){
+ if(quizIndex>=quiz.length){finishQuiz();return}
+ quizLocked=false;
+ const q=quiz[quizIndex];
+ const target=$(quizType==='exam'?'examQuestion':'practiceQuestion');
+ target.innerHTML=`
+ <span class="tag">${quizIndex+1} / ${quiz.length} • ${q.level.toUpperCase()}</span>
+ <h3 style="margin-top:12px">${lang==='en'?q.q:q.hi}</h3>
+ ${q.o.map((o,i)=>`<label class="option"><input type="radio" name="quizAnswer" value="${i}">${o}</label>`).join('')}
+ <button class="btn full" onclick="submitAnswer()">Submit Answer</button>
+ <div id="feedback"></div>`;
+}
+function submitAnswer(){
+ if(quizLocked)return;
+ const selected=document.querySelector('input[name="quizAnswer"]:checked');
+ if(!selected){
+ $('feedback').innerHTML='<p>Please select an answer first.</p>';
+ return;
+ }
+ quizLocked=true;
+ const q=quiz[quizIndex],correct=Number(selected.value)===q.a;
+ if(correct)quizScore++;
+ $('feedback').innerHTML=`
+ <div class="answer ${correct?'':'bad'}">
+ <b>${correct?'Correct!':'Incorrect'}</b><br>
+ Correct answer: ${q.o[q.a]}<br>
+ ${q.e}
+ </div>
+ <button class="btn full" style="margin-top:12px" onclick="nextQuestion()">Next Question →</button>`;
+}
+function nextQuestion(){
+ quizIndex++;
+ renderQuestion();
+}
+function finishQuiz(){
+ if(quizType==='exam'&&examTimer){
+ clearInterval(examTimer);examTimer=null;
+ }
+ const total=quiz.length;
+ if(total===0)return;
+ const percent=Math.round(quizScore/total*100);
+ stats.attempts++;
+ stats.best=Math.max(stats.best,percent);
+ stats.correct+=quizScore;
+ stats.history.unshift({
+ type:quizType==='exam'?'Exam':'Practice',
+ score:quizScore,total:total,
+ date:new Date().toLocaleDateString()
+ });
+ stats.history=stats.history.slice(0,20);
+ save();updateStats();
+ const target=$(quizType==='exam'?'examQuiz':'practiceQuiz');
+ target.innerHTML=`
+ <div class="card">
+ <span class="tag">TEST COMPLETED</span>
+ <h2 style="margin-top:12px">Your Result</h2>
+ <div class="stat">${percent}%</div>
+ <p>Correct answers: ${quizScore}/${total}</p>
+ <div class="progress"><div style="width:${percent}%"></div></div>
+ <p>${percent>=80?'Excellent work!':percent>=50?'Good effort. Keep practising.':'Review the lessons and try again.'}</p>
+ <button class="btn full" onclick="startQuiz('${quizType}')">Try Again</button>
+ <button class="btn ghost full" style="margin-top:8px" onclick="go('analytics')">View Analytics</button>
+ </div>`;
+}
+
+/* INITIALIZE */
+applyTheme();
+$('langBtn').textContent=lang==='en'?'हिंदी':'English';
+$('languageStatus').textContent=lang==='en'?'English':'हिंदी';
+$('welcome').textContent=lang==='en'?'Master Probability.':'प्रायिकता सीखें।';
+$('welcomeSub').textContent=lang==='en'?
+'Learn concepts. Perform experiments. Test your knowledge.':
+'कॉन्सेप्ट सीखें, प्रयोग करें और अपनी तैयारी जाँचें।';
+renderLessons();
+renderFormulas();
+solverFields();
+renderLab();
+updateStats();
+</script>
+</body>
+</html>
